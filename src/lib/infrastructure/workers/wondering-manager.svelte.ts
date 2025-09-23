@@ -152,7 +152,7 @@ class WonderingManager {
 				for (let y = 0; y < this.boardHeight; y++) {
 					const id = this.cellId(x, y);
 					this.cellIdToPosition.set(id, { x, y });
-					worker.postMessage({ type: 'register', id, duration: 1200 });
+					worker.postMessage({ type: 'register', id, duration: 500 });
 				}
 			}
 		}

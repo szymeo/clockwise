@@ -3,6 +3,7 @@
 	import type { ClockRotation } from '../domain/ClockRotation';
 	import ClockFace from './ClockFace.svelte';
 	import ClockHand from './ClockHand.svelte';
+	import { CLOCK_FACE_SIZE } from '../domain/consts';
 
 	type Props = {
 		x: number;
@@ -10,6 +11,7 @@
 		rotation: ClockRotation;
 		rawRotation: [number, number] | null;
 		delay: number;
+		renderingType?: 'webgl' | 'svg';
 	};
 
 	const ROTATION_ANGLES: Record<ClockRotation, number[]> = {
@@ -22,7 +24,7 @@
 		'': [135, 135]
 	};
 
-	const { x, y, rotation, rawRotation, delay }: Props = $props();
+	const { x, y, rotation, rawRotation, delay, renderingType = 'webgl' }: Props = $props();
 	let firstAngle = $state(0);
 	let secondAngle = $state(0);
 	let rendered = $state(false);
@@ -40,11 +42,37 @@
 
 		return () => clearTimeout(t);
 	});
+
+	// Calculate center of the clock for SVG rotation transform
+	const centerX = $derived(x + CLOCK_FACE_SIZE / 2);
+	const centerY = $derived(y + CLOCK_FACE_SIZE / 2);
+
+	// Get the actual angles to use (either raw angles from wondering mode or predefined angles)
+	const actualFirstAngle = $derived(rawRotation?.[0] ?? firstAngle);
+	const actualSecondAngle = $derived(rawRotation?.[1] ?? secondAngle);
 </script>
 
 {#if rendered}
-	<ClockFace {x} {y}>
-		<ClockHand angle={rawRotation?.[0] ?? firstAngle} />
-		<ClockHand angle={rawRotation?.[1] ?? secondAngle} />
-	</ClockFace>
+	{#if renderingType === 'webgl'}
+		<ClockFace {x} {y}>
+			<ClockHand angle={actualFirstAngle} />
+			<ClockHand angle={actualSecondAngle} />
+		</ClockFace>
+	{:else if renderingType === 'svg'}
+		<g>
+			<!-- Clock face with direct SVG circle -->
+			<circle
+				cx={centerX}
+				cy={centerY}
+				r={CLOCK_FACE_SIZE / 2}
+				fill="none"
+				stroke="#e5e5e5"
+				stroke-width="1"
+			/>
+
+			<!-- Clock hands using ClockHand component with direct SVG -->
+			<ClockHand angle={actualFirstAngle} renderingType="svg" {centerX} {centerY} />
+			<ClockHand angle={actualSecondAngle} renderingType="svg" {centerX} {centerY} />
+		</g>
+	{/if}
 {/if}
