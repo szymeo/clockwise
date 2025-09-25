@@ -42,6 +42,6 @@
 		]
 	},
 	"dependencies": {
-		"glixy": "^0.0.14"
+		"glixy": "^0.0.15"
 	}
 }

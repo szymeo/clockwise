@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { clocksRenderer } from '$lib/application/clocks-renderer.svelte';
 	import Clock from '$lib/ui/Clock.svelte';
-	import SvgUseClock from '$lib/ui/SvgUseClock.svelte';
 	import RenderingSwitch from '$lib/ui/RenderingSwitch.svelte';
 	import { onMount, untrack } from 'svelte';
 	import { Stage } from 'glixy';
@@ -89,7 +88,7 @@
 								y={j * (CLOCK_FACE_SIZE + 1)}
 								rotation={clocksRenderer.cellRotation(i, j)}
 								rawRotation={clocksRenderer.cellRawRotation(i, j)}
-								delay={i * 10 + j * 10}
+								delay={i * 20 + j * 20}
 							/>
 						{/each}
 					</div>
@@ -109,7 +108,7 @@
 						y={j * (CLOCK_FACE_SIZE + 1)}
 						rotation={clocksRenderer.cellRotation(i, j)}
 						rawRotation={clocksRenderer.cellRawRotation(i, j)}
-						delay={i * 10 + j * 10}
+						delay={i * 20 + j * 20}
 						renderingType="svg"
 					/>
 				{/each}
@@ -117,62 +116,20 @@
 		</svg>
 	{/if}
 
-	{#if clocksRenderer.renderingType === 'svg-use'}
-		<svg width={boardWidth} height={boardHeight} viewBox={`0 0 ${boardWidth} ${boardHeight}`}>
-			<defs>
-				<!-- Single clock symbol with CSS variable controlled hand rotations -->
-				<symbol id="clock" viewBox={`0 0 ${CLOCK_FACE_SIZE} ${CLOCK_FACE_SIZE}`}>
-					<!-- Clock face -->
-					<circle
-						cx={CLOCK_FACE_SIZE / 2}
-						cy={CLOCK_FACE_SIZE / 2}
-						r={CLOCK_FACE_SIZE / 2}
-						fill="none"
-						stroke="#e5e5e5"
-						stroke-width="2"
-					/>
-
-					<!-- First hand controlled by CSS variable -->
-					<line
-						class="clock-hand-1"
-						x1={CLOCK_FACE_SIZE / 2}
-						y1={CLOCK_FACE_SIZE / 2}
-						x2={CLOCK_FACE_SIZE - 2}
-						y2={CLOCK_FACE_SIZE / 2}
-						stroke="#000000"
-						stroke-width="2"
-						stroke-linecap="round"
-						style="transform-origin: {CLOCK_FACE_SIZE / 2}px {CLOCK_FACE_SIZE /
-							2}px; transform: rotate(var(--hand1-rotation, 0deg));will-change: transform;"
-					/>
-
-					<!-- Second hand controlled by CSS variable -->
-					<line
-						class="clock-hand-2"
-						x1={CLOCK_FACE_SIZE / 2}
-						y1={CLOCK_FACE_SIZE / 2}
-						x2={CLOCK_FACE_SIZE - 2}
-						y2={CLOCK_FACE_SIZE / 2}
-						stroke="#000000"
-						stroke-width="2"
-						stroke-linecap="round"
-						style="transform-origin: {CLOCK_FACE_SIZE / 2}px {CLOCK_FACE_SIZE /
-							2}px; transform: rotate(var(--hand2-rotation, 0deg));will-change: transform;"
-					/>
-				</symbol>
-			</defs>
-
+	{#if clocksRenderer.renderingType === 'html'}
+		<div class="relative h-full w-full">
 			{#each Array.from({ length: xClocks }).map((_, i) => i) as i}
 				{#each Array.from({ length: yClocks }).map((_, j) => j) as j}
-					<SvgUseClock
+					<Clock
 						x={i * (CLOCK_FACE_SIZE + 1)}
 						y={j * (CLOCK_FACE_SIZE + 1)}
 						rotation={clocksRenderer.cellRotation(i, j)}
 						rawRotation={clocksRenderer.cellRawRotation(i, j)}
-						delay={i * 10 + j * 10}
+						delay={i * 20 + j * 20}
+						renderingType="html"
 					/>
 				{/each}
 			{/each}
-		</svg>
+		</div>
 	{/if}
 </div>

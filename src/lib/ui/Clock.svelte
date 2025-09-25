@@ -11,7 +11,7 @@
 		rotation: ClockRotation;
 		rawRotation: [number, number] | null;
 		delay: number;
-		renderingType?: 'webgl' | 'svg';
+		renderingType?: 'webgl' | 'svg' | 'html';
 	};
 
 	const ROTATION_ANGLES: Record<ClockRotation, number[]> = {
@@ -52,27 +52,40 @@
 	const actualSecondAngle = $derived(rawRotation?.[1] ?? secondAngle);
 </script>
 
-{#if rendered}
-	{#if renderingType === 'webgl'}
-		<ClockFace {x} {y}>
-			<ClockHand angle={actualFirstAngle} />
-			<ClockHand angle={actualSecondAngle} />
-		</ClockFace>
-	{:else if renderingType === 'svg'}
-		<g>
-			<!-- Clock face with direct SVG circle -->
-			<circle
-				cx={centerX}
-				cy={centerY}
-				r={CLOCK_FACE_SIZE / 2}
-				fill="none"
-				stroke="#e5e5e5"
-				stroke-width="1"
-			/>
+<!-- {#if rendered} -->
+{#if renderingType === 'webgl'}
+	<ClockFace {x} {y}>
+		<ClockHand angle={actualFirstAngle} />
+		<ClockHand angle={actualSecondAngle} />
+	</ClockFace>
+{:else if renderingType === 'svg'}
+	<g>
+		<!-- Clock face with direct SVG circle -->
+		<circle
+			cx={centerX}
+			cy={centerY}
+			r={CLOCK_FACE_SIZE / 2}
+			fill="none"
+			stroke="#e5e5e5"
+			stroke-width="1"
+		/>
 
-			<!-- Clock hands using ClockHand component with direct SVG -->
-			<ClockHand angle={actualFirstAngle} renderingType="svg" {centerX} {centerY} />
-			<ClockHand angle={actualSecondAngle} renderingType="svg" {centerX} {centerY} />
-		</g>
-	{/if}
+		<!-- Clock hands using ClockHand component with direct SVG -->
+		<ClockHand angle={actualFirstAngle} renderingType="svg" {centerX} {centerY} />
+		<ClockHand angle={actualSecondAngle} renderingType="svg" {centerX} {centerY} />
+	</g>
+{:else if renderingType === 'html'}
+	<div
+		class="absolute rounded-full border border-gray-300 bg-white"
+		style="
+				width: {CLOCK_FACE_SIZE}px;
+				height: {CLOCK_FACE_SIZE}px;
+				left: {x}px;
+				top: {y}px;
+			"
+	>
+		<ClockHand angle={actualFirstAngle} renderingType="html" />
+		<ClockHand angle={actualSecondAngle} renderingType="html" />
+	</div>
 {/if}
+<!-- {/if} -->

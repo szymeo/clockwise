@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { deg2rad } from '$lib/application/rad2deg';
 	import { CLOCK_HAND_HEIGHT, CLOCK_FACE_SIZE } from '$lib/domain/consts';
-	import { Rectangle } from 'glixy';
+	import { Rectangle, Sprite } from 'glixy';
 	import { Tween } from 'svelte/motion';
 
 	type Props = {
 		angle: number;
-		renderingType?: 'webgl' | 'svg';
+		renderingType?: 'webgl' | 'svg' | 'html';
 		centerX?: number;
 		centerY?: number;
 	};
@@ -41,17 +41,13 @@
 </script>
 
 {#if renderingType === 'webgl'}
-	<Rectangle
+	<Sprite
 		x={0}
 		y={0}
-		anchor={{ x: CLOCK_HAND_HEIGHT / 2, y: CLOCK_HAND_HEIGHT / 2 }}
+		anchor={{ x: 0, y: 0.5 }}
 		width={CLOCK_FACE_SIZE / 2 + CLOCK_HAND_HEIGHT / 2}
 		height={CLOCK_HAND_HEIGHT}
-		cornerRadius={50}
-		background={{
-			color: 0x000000,
-			opacity: 1
-		}}
+		texture="/clockhand.png"
 		rotation={deg2rad(angle.current)}
 	/>
 {:else if renderingType === 'svg'}
@@ -64,4 +60,16 @@
 		stroke-width="2"
 		stroke-linecap="round"
 	/>
+{:else if renderingType === 'html'}
+	<div
+		class="absolute rounded-full bg-black"
+		style="
+			width: {lineLength}px;
+			height: 2px;
+			left: 50%;
+			top: 50%;
+			transform-origin: 0 50%;
+			transform: translate(0, -50%) rotate({angle.current}deg);
+		"
+	></div>
 {/if}

@@ -2,13 +2,13 @@ import type { ClockRotation } from '$lib/domain/ClockRotation';
 import { NUMBERS_CLOCK_SCHEME } from '$lib/domain/scheme';
 import { wonderingManager } from '$lib/infrastructure/workers/wondering-manager.svelte';
 
-export type RenderingType = 'html' | 'svg' | 'svg-use' | 'webgl';
+export type RenderingType = 'html' | 'svg' | 'webgl';
 
 export class ClocksRenderer {
 	public board: ClockRotation[][] = $state([]);
 	private text: string = '';
 	public wondering: boolean = $state(false);
-	public renderingType: RenderingType = $state('svg');
+	public renderingType: RenderingType = $state('webgl');
 	public width: number;
 	public height: number;
 	private wonderingFrame: number = $state(0);

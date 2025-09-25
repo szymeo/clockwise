@@ -1,9 +1,9 @@
 <script lang="ts">
-	export type RenderingType = 'html' | 'svg' | 'svg-use' | 'webgl';
+	export type RenderingType = 'html' | 'svg' | 'webgl';
 
 	let {
-		value = $bindable('webgl'),
-		options = ['html', 'svg', 'svg-use', 'webgl'] as RenderingType[]
+		value = $bindable('html'),
+		options = ['html', 'svg', 'webgl'] as RenderingType[]
 	}: {
 		value: RenderingType;
 		options?: RenderingType[];
@@ -15,9 +15,9 @@
 </script>
 
 <div class="inline-flex rounded-full border border-white/20 bg-gray-200 p-1 backdrop-blur-md">
-	<div class="relative grid w-80 grid-cols-4 overflow-hidden rounded-full bg-transparent">
+	<div class="relative grid w-60 grid-cols-3 overflow-hidden rounded-full bg-transparent">
 		<div
-			class="absolute top-0 left-0 h-full w-1/4 rounded-full bg-gray-300 transition-transform duration-300 ease-out"
+			class="absolute top-0 left-0 h-full w-1/3 rounded-full bg-gray-300 transition-transform duration-300 ease-out"
 			style:transform="translateX({options.indexOf(value) * 100}%)"
 		></div>
 		{#each options as option (option)}
