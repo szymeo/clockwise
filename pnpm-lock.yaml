@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       glixy:
-        specifier: ^0.0.15
-        version: 0.0.15(svelte@5.39.3)
+        specifier: ^0.0.16
+        version: 0.0.16(svelte@5.39.3)
     devDependencies:
       '@eslint/compat':
         specifier: ^1.2.5
@@ -907,8 +907,8 @@ packages:
   gifuct-js@2.1.2:
     resolution: {integrity: sha512-rI2asw77u0mGgwhV3qA+OEgYqaDn5UNqgs+Bx0FGwSpuqfYn+Ir6RQY5ENNQ8SbIiG/m5gVa7CD5RriO4f4Lsg==}
 
-  glixy@0.0.15:
-    resolution: {integrity: sha512-EuDC5ae+4d7cx3mpabiPJIe3XWmUy8apq4Qfe9Unlpib115npvpscm9PlFjTvJgk9AjLGIT9MJ8zZ1bPhNqLPA==}
+  glixy@0.0.16:
+    resolution: {integrity: sha512-Wt7fQN7LZyqId5BzEfTmfb/LsCKk6YfHHxIkNOPXfxmF+Ac5rmgOlbokKNSIkf7aKgxMyY+almZszl0OWFxDSw==}
     peerDependencies:
       svelte: ^5.0.0
 
@@ -2254,7 +2254,7 @@ snapshots:
     dependencies:
       js-binary-schema-parser: 2.0.3
 
-  glixy@0.0.15(svelte@5.39.3):
+  glixy@0.0.16(svelte@5.39.3):
     dependencies:
       pixi.js: 8.13.2
       svelte: 5.39.3

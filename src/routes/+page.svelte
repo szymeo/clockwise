@@ -79,7 +79,7 @@
 >
 	{#if clocksRenderer.renderingType === 'webgl'}
 		{#if host}
-			<Stage background="#ffffff" {host} antialias={true}>
+			<Stage worker={true} background="#ffffff" {host} antialias={true}>
 				{#each Array.from({ length: xClocks }).map((_, i) => i) as i}
 					<div class="flex flex-col">
 						{#each Array.from({ length: yClocks }).map((_, j) => j) as j}
