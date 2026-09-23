@@ -1,5 +1,5 @@
 <!--
-	A wall of clocks filling its canvas. `mode` is read once, remount to switch.
+	A wall of clocks filling its container. `mode` is read once, remount to switch.
 	Keys: `w` toggles wandering (same as the window losing focus), `g` glitches, `d` flips the theme.
 -->
 <script lang="ts">
@@ -9,7 +9,7 @@
 	import { prefersReducedMotion } from 'svelte/motion';
 	import { MediaQuery } from 'svelte/reactivity';
 
-	let { mode, class: className = 'block h-dvh w-full' }: { mode: Mode; class?: string } = $props();
+	let { mode }: { mode: Mode } = $props();
 
 	let canvas: HTMLCanvasElement;
 	const game = new Game(mode);
@@ -71,4 +71,12 @@
 	onfocus={() => mode.wanderWhenAway && game.setWandering(false)}
 />
 
-<canvas bind:this={canvas} class={className}></canvas>
+<canvas bind:this={canvas}></canvas>
+
+<style>
+	canvas {
+		display: block;
+		width: 100%;
+		height: 100%;
+	}
+</style>

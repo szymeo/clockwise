@@ -47,10 +47,12 @@ With reduced motion turned on, hands snap into place and patterns never play.
 	import ClockWall from '$lib/ui/ClockWall.svelte';
 </script>
 
-<ClockWall mode={CLASSIC} class="block h-64 w-full" />
+<div style="height: 16rem">
+	<ClockWall mode={CLASSIC} />
+</div>
 ```
 
-`class` sizes the canvas, the default fills the viewport.
+The wall fills its container.
 
 ## How it works
 

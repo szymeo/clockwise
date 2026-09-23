@@ -1,9 +1,4 @@
-import {
-	DIGIT_HEIGHT,
-	DIGIT_WIDTH,
-	NUMBERS_CLOCK_SCHEME,
-	ROTATION_ANGLES
-} from '../domain/scheme.ts';
+import { DIGIT_HEIGHT, DIGIT_WIDTH, glyph, ROTATION_ANGLES } from '../domain/scheme.ts';
 
 /**
  * Hand angles (degrees) and an optional clock size for a clock at cell offset x, y from the wall center,
@@ -88,12 +83,12 @@ const kiss: Pattern = (x, y, t, span) => {
 const sixtyNine: Pattern = (x, y, t) => {
 	const col = Math.floor(x + DIGIT_WIDTH);
 	const row = Math.floor(y + DIGIT_HEIGHT / 2);
-	const glyph =
+	const char =
 		col >= 0 && col < 2 * DIGIT_WIDTH && row >= 0 && row < DIGIT_HEIGHT
-			? NUMBERS_CLOCK_SCHEME[col < DIGIT_WIDTH ? 6 : 9][row][col % DIGIT_WIDTH]
-			: '';
-	return glyph
-		? [...ROTATION_ANGLES[glyph], 1.1]
+			? glyph(col < DIGIT_WIDTH ? 6 : 9, col % DIGIT_WIDTH, row)
+			: ' ';
+	return char !== ' '
+		? [...ROTATION_ANGLES[char], 1.1]
 		: [...line(deg(Math.atan2(y, x)) + 90 + t * 45), 0.9];
 };
 

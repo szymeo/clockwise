@@ -1,9 +1,4 @@
-import {
-	DIGIT_HEIGHT,
-	DIGIT_WIDTH,
-	NUMBERS_CLOCK_SCHEME,
-	ROTATION_ANGLES
-} from '../domain/scheme.ts';
+import { DIGIT_HEIGHT, DIGIT_WIDTH, glyph, ROTATION_ANGLES } from '../domain/scheme.ts';
 import { Has, turn_hands } from './components.ts';
 import type { Game } from './game.ts';
 
@@ -31,8 +26,7 @@ export function sys_time(game: Game) {
 		const y = game.cell.row[e] - startY;
 		const digit =
 			x >= 0 && y >= 0 && y < DIGIT_HEIGHT ? text[Math.floor(x / DIGIT_WIDTH)] : undefined;
-		const [angle1, angle2] =
-			ROTATION_ANGLES[digit ? NUMBERS_CLOCK_SCHEME[+digit][y][x % DIGIT_WIDTH] : ''];
+		const [angle1, angle2] = ROTATION_ANGLES[digit ? glyph(+digit, x % DIGIT_WIDTH, y) : ' '];
 		turn_hands(game, e, angle1, angle2);
 	}
 }
