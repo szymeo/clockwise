@@ -1,6 +1,3 @@
-<script lang="ts">
-	import { CLASSIC } from '$lib/game/modes';
-	import ClockWall from '$lib/ui/ClockWall.svelte';
-</script>
-
-<ClockWall mode={CLASSIC} />
+<svelte:head>
+	<title>clockwise</title>
+</svelte:head>

@@ -23,7 +23,7 @@ const VERTEX = `#version 300 es
 uniform vec2 u_viewport;
 uniform vec3 u_background;
 uniform vec3 u_hand;
-uniform bool u_colors;
+uniform float u_colors;
 uniform float u_lightness;
 uniform float u_hue;
 layout(location = 0) in vec4 a_clock; // center x, center y (CSS px), hand angles (deg)
@@ -51,9 +51,10 @@ vec3 oklch(float l, float c, float h) {
 // Colors: hue from the hand angle plus a slow drift, more saturated the faster it turns.
 vec3 tint(float angle, float speed) {
 	float energy = 1.0 - exp(-abs(speed) / 60.0);
-	if (u_colors) return oklch(u_lightness, 0.13 + 0.06 * energy, angle + u_hue);
 	float lit = 0.2 + 0.8 * (0.5 + 0.5 * cos(angle - LIGHT));
-	return mix(u_background, u_hand, mix(1.0, lit, energy));
+	vec3 gray = mix(u_background, u_hand, mix(1.0, lit, energy));
+	if (u_colors == 0.0) return gray;
+	return mix(gray, oklch(u_lightness, 0.13 + 0.06 * energy, angle + u_hue), u_colors);
 }
 
 void main() {
@@ -149,7 +150,7 @@ export function createRenderer(canvas: HTMLCanvasElement) {
 /** Redraws every visible clock in one draw call, only when something changed or colors drift. */
 export function sys_draw(game: Game) {
 	const renderer = game.renderer;
-	const drifting = game.mode.colors && !game.reducedMotion;
+	const drifting = game.colors > 0 && !game.reducedMotion;
 	if (!renderer || !(game.dirty || drifting)) return;
 	game.dirty = false;
 
@@ -164,7 +165,7 @@ export function sys_draw(game: Game) {
 	gl.uniform3fv(renderer.border, theme.border);
 	gl.uniform3fv(renderer.hand, theme.hand);
 	gl.uniform3fv(renderer.background, theme.background);
-	gl.uniform1i(renderer.colors, game.mode.colors ? 1 : 0);
+	gl.uniform1f(renderer.colors, game.colors);
 	gl.uniform1f(renderer.lightness, theme.lightness);
 	gl.uniform1f(renderer.hue, drifting ? game.seconds * HUE_DRIFT : 0);
 
