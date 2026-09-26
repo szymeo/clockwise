@@ -1,6 +1,7 @@
 <!--
-	A wall of clocks filling its container. `mode` is read once, remount to switch.
-	Keys: `w` toggles wandering (same as the window losing focus), `g` glitches, `d` flips the theme.
+	A wall of clocks filling its container. Changing `mode` keeps the clocks and fades the colors over.
+	`waiting` is read once and keeps the hands flat and still until `drop(x, y)` drops a tear at viewport px x, y.
+	Keys: `w` toggles wandering (patterns back to back), `g` glitches, `d` flips the theme.
 -->
 <script lang="ts">
 	import { Game } from '$lib/game/game';
@@ -9,10 +10,10 @@
 	import { prefersReducedMotion } from 'svelte/motion';
 	import { MediaQuery } from 'svelte/reactivity';
 
-	let { mode }: { mode: Mode } = $props();
+	let { mode, waiting = false }: { mode: Mode; waiting?: boolean } = $props();
 
 	let canvas: HTMLCanvasElement;
-	const game = new Game(mode);
+	const game = new Game(mode, waiting);
 	const systemDark = new MediaQuery('(prefers-color-scheme: dark)');
 	/** Set by the `d` key, otherwise the system theme wins. */
 	let darkOverride = $state<boolean>();
@@ -20,7 +21,6 @@
 
 	onMount(() => {
 		game.start(canvas);
-		if (mode.wanderWhenAway && !document.hasFocus()) game.setWandering(true);
 
 		const observer = new ResizeObserver(([entry]) => {
 			const { inlineSize: width, blockSize: height } = entry.contentBoxSize[0];
@@ -46,6 +46,11 @@
 	});
 
 	$effect(() => {
+		game.setMode(mode);
+		if (mode.wander === 'away' && !document.hasFocus()) game.setWandering(true);
+	});
+
+	$effect(() => {
 		game.reducedMotion = prefersReducedMotion.current;
 		if (game.reducedMotion) game.setWandering(false);
 	});
@@ -56,9 +61,13 @@
 		game.dirty = true;
 	});
 
+	export function drop(x: number, y: number) {
+		const { left, top } = canvas.getBoundingClientRect();
+		game.drop(x - left, y - top);
+	}
+
 	function onkeydown(event: KeyboardEvent) {
 		const key = event.key.toLowerCase();
-		// Same as the window losing or getting back focus.
 		if (key === 'w') game.setWandering(!game.wandering);
 		if (key === 'd') darkOverride = !dark;
 		if (key === 'g') game.glitch();
@@ -67,8 +76,8 @@
 
 <svelte:window
 	{onkeydown}
-	onblur={() => mode.wanderWhenAway && game.setWandering(true)}
-	onfocus={() => mode.wanderWhenAway && game.setWandering(false)}
+	onblur={() => mode.wander === 'away' && game.setWandering(true)}
+	onfocus={() => mode.wander === 'away' && game.setWandering(false)}
 />
 
 <canvas bind:this={canvas}></canvas>

@@ -1,7 +1,7 @@
 import type { Entity, Game } from './game.ts';
 
-// ponytail: fixed capacity, enough for a ~7400x4400 CSS px wall. Grow the stores on demand if a bigger wall is ever needed.
-export const MAX_ENTITIES = 1 << 15;
+// ponytail: fixed capacity, enough for a ~10000x5600 CSS px wall. Grow the stores on demand if a bigger wall is ever needed.
+export const MAX_ENTITIES = 1 << 16;
 
 export const Has = {
 	Cell: 1 << 0,
@@ -23,7 +23,9 @@ export function com_hands(game: Game, entity: Entity) {
 	game.mask[entity] |= Has.Hands;
 	const hands = game.hands;
 	hands.angle1[entity] = hands.velocity1[entity] = hands.target1[entity] = 0;
-	hands.angle2[entity] = hands.velocity2[entity] = hands.target2[entity] = 0;
+	// Hands start as a flat line, a still wall.
+	hands.angle2[entity] = hands.target2[entity] = 180;
+	hands.velocity2[entity] = 0;
 	game.scale.value[entity] = game.scale.target[entity] = 1;
 }
 
