@@ -1,0 +1,9 @@
+// Static files from `vite build`, served at time.readsimon.com. Deploy: pnpm run deploy
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "clockwise",
+	"compatibility_date": "2026-09-26",
+	"assets": { "directory": "./build" },
+	"routes": [{ "pattern": "time.readsimon.com", "custom_domain": true }],
+	"workers_dev": false
+}

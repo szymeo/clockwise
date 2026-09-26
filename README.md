@@ -5,6 +5,8 @@ A wall of analog clocks that together tell the time.
 Now and then the wall glitches: every clock breaks away into a shared pattern, holds it for a few seconds, then springs back to the time.
 Made to sit on a second screen and catch your eye when you look back at it.
 
+Live at [time.readsimon.com](https://time.readsimon.com).
+
 ![The time](docs/time.png)
 
 ![Classic, dark theme, vortex pattern](docs/classic-dark.png)
@@ -108,4 +110,5 @@ A mode is a plain object in the same file: which patterns it plays, how long pat
 - `pnpm test`: plays every pattern headless and fails if a hand turns backwards, a trip hand stops, a pattern comes back too soon, the time does not come back, or sizes pulse. Needs Node 22.18 or later.
 - `pnpm check`: type check.
 - `pnpm lint`: Prettier and ESLint.
-- `pnpm build`: production build.
+- `pnpm build`: static production build in `build/`.
+- `pnpm run deploy`: builds and deploys to Cloudflare at time.readsimon.com (`wrangler.jsonc`). Needs `wrangler login` first.
